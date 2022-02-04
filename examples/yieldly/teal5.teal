@@ -1,0 +1,912 @@
+	#pragma version 5
+	int 0
+	txn ApplicationID
+	==
+	bnz label1
+	pushint 5                       // DeleteApplication
+	txn OnCompletion        
+	==
+	bnz label2
+	int 4                           // UpdateApplication
+	txn OnCompletion
+	==
+	bnz label3
+	intc 5 
+	txn OnCompletion
+	==
+	bnz label4
+	int 1                           // OptIn
+	txn OnCompletion
+	==
+	bnz label5
+	int 0                           // NoOp
+	txn OnCompletion
+	==
+	bnz label6
+	int 0
+	return
+label1:
+	bytec 11 
+	txn Sender
+	app_global_put
+	bytec 6 
+	txna ApplicationArgs 0
+	app_global_put
+	bytec 7 
+	txna ApplicationArgs 1
+	app_global_put
+	bytec 8 
+	txna ApplicationArgs 2
+	btoi
+	app_global_put
+	byte base64 Tm9fUmV3YXJkX1Rva2Vu
+	txna ApplicationArgs 3
+	btoi
+	app_global_put
+	int 1
+	store 0
+label8:
+	bytec 12 
+	load 0
+	callsub label7
+	store 1
+	load 1
+	concat
+	pushint 3
+	load 0
+	+
+	txnas ApplicationArgs
+	btoi
+	app_global_put
+	bytec 9 
+	load 1
+	concat
+	int 0
+	itob
+	app_global_put
+	bytec 10 
+	load 1
+	concat
+	int 0
+	itob
+	app_global_put
+	bytec 4 
+	load 1
+	concat
+	int 0
+	itob
+	app_global_put
+	load 0
+	int 1
+	+
+	store 0
+	load 0
+	byte base64 Tm9fUmV3YXJkX1Rva2Vu
+	app_global_get
+	<=
+	bnz label8
+	byte base64 R2xvYmFsX1N0YWtl
+	int 0
+	itob
+	app_global_put
+	bytec 14 
+	int 0
+	itob
+	app_global_put
+	bytec 5 
+	intc 4 
+	intc 4 
+	exp
+	itob
+	app_global_put
+	pushbytes 0x41646472657373 
+	global CurrentApplicationAddress
+	app_global_put
+	txn NumAppArgs
+	int 4
+	load 0
+	int 1
+	-
+	+
+	==
+	assert
+	int 1
+	return
+label2:
+	callsub label9
+	int 0
+	return
+label3:
+	callsub label9
+	global GroupSize
+	int 1
+	==
+	assert
+	int 1
+	return
+label5:
+	global GroupSize
+	int 1
+	==
+	assert
+	int 0
+	byte base64 VXNlcl9TdGFrZQ==
+	int 0
+	itob
+	app_local_put
+	int 1
+	store 0
+label10:
+	load 0
+	callsub label7
+	store 1
+	int 0
+	byte base64 VXNlcl9DbGFpbWFibGVf
+	load 1
+	concat
+	int 0
+	itob
+	app_local_put
+	int 0
+	bytec 13 
+	load 1
+	concat
+	int 0
+	itob
+	app_local_put
+	load 0
+	int 1
+	+
+	store 0
+	load 0
+	byte base64 Tm9fUmV3YXJkX1Rva2Vu
+	app_global_get
+	<=
+	bnz label10
+	int 1
+	return
+label27:
+	global LatestTimestamp
+	itob
+	bytec 6 
+	app_global_get
+	b>=
+	assert
+	retsub
+label6:
+	callsub label11
+	txna ApplicationArgs 0
+	pushbytes 0x6f70745f696e5f6173736574 
+	==
+	bnz label12
+	txna ApplicationArgs 0
+	pushbytes 0x6c6f636b5f746f6b656e73 
+	==
+	bnz label13
+	txna ApplicationArgs 0
+	bytec 15 
+	==
+	bnz label14
+	txna ApplicationArgs 0
+	pushbytes 0x6368616e67655f61646d696e 
+	==
+	bnz label15
+	txna ApplicationArgs 0
+	pushbytes 0x6368616e67655f707265636973696f6e 
+	==
+	bnz label16
+	txn GroupIndex
+	int 0
+	==
+	assert
+	txna ApplicationArgs 0
+	pushbytes 0x656d6572675f7769746864726177 
+	==
+	bnz label17
+	txna ApplicationArgs 0
+	pushbytes 0x656d6572675f77697468647261775f616c676f 
+	==
+	bnz label18
+	callsub label19
+	txna ApplicationArgs 0
+	pushbytes 0x7769746864726177 
+	==
+	bnz label20
+	txna ApplicationArgs 0
+	pushbytes 0x636c61696d 
+	==
+	bnz label21
+	txna ApplicationArgs 0
+	pushbytes 0x7374616b65 
+	==
+	bnz label22
+	int 0
+	return
+label19:
+	byte base64 R2xvYmFsX1N0YWtl
+	app_global_get
+	int 0
+	itob
+	b==
+	bnz label23
+	bytec 14 
+	global LatestTimestamp
+	itob
+	app_global_put
+	global LatestTimestamp
+	itob
+	bytec 7 
+	app_global_get
+	b>=
+	bz label24
+	bytec 7 
+	app_global_get
+	store 13
+	b label25
+label24:
+	global LatestTimestamp
+	itob
+	store 13
+label25:
+	int 1
+	store 0
+label26:
+	load 0
+	callsub label7
+	store 1
+	load 13
+	bytec 6 
+	app_global_get
+	b-
+	bytec 10 
+	load 1
+	concat
+	app_global_get
+	b*
+	bytec 7 
+	app_global_get
+	bytec 6 
+	app_global_get
+	b-
+	b/
+	bytec 9 
+	load 1
+	concat
+	app_global_get
+	b-
+	store 2
+	bytec 9 
+	load 1
+	concat
+	bytec 9 
+	load 1
+	concat
+	app_global_get
+	load 2
+	b+
+	app_global_put
+	bytec 4 
+	load 1
+	concat
+	bytec 4 
+	load 1
+	concat
+	app_global_get
+	load 2
+	bytec 5 
+	app_global_get
+	b*
+	byte base64 R2xvYmFsX1N0YWtl
+	app_global_get
+	b/
+	b+
+	app_global_put
+	load 0
+	int 1
+	+
+	store 0
+	load 0
+	byte base64 Tm9fUmV3YXJkX1Rva2Vu
+	app_global_get
+	<=
+	bnz label26
+label23:
+	retsub
+label22:
+	callsub label27
+	global GroupSize
+	byte base64 Tm9fUmV3YXJkX1Rva2Vu
+	app_global_get
+	intc 5 
+	+
+	==
+	assert
+	intc 5 
+	callsub label28
+	gtxn 1 TypeEnum
+	int 4
+	==
+	assert
+	gtxn 1 AssetAmount
+	int 1
+	>=
+	assert
+	gtxn 1 AssetReceiver
+	global CurrentApplicationAddress
+	==
+	assert
+	gtxn 1 Sender
+	global CurrentApplicationAddress
+	!=
+	assert
+	int 1
+	callsub label29
+	int 0
+	byte base64 VXNlcl9TdGFrZQ==
+	app_local_get
+	store 12
+	int 0
+	byte base64 VXNlcl9TdGFrZQ==
+	int 0
+	byte base64 VXNlcl9TdGFrZQ==
+	app_local_get
+	gtxn 1 AssetAmount
+	itob
+	b+
+	store 3
+	load 3
+	app_local_put
+	byte base64 R2xvYmFsX1N0YWtl
+	byte base64 R2xvYmFsX1N0YWtl
+	app_global_get
+	gtxn 1 AssetAmount
+	itob
+	b+
+	app_global_put
+	callsub label30
+	int 1
+	return
+label20:
+	callsub label27
+	global GroupSize
+	byte base64 Tm9fUmV3YXJkX1Rva2Vu
+	app_global_get
+	int 1
+	+
+	==
+	assert
+	int 1
+	callsub label28
+	gtxn 0 Fee
+	int 2000
+	>=
+	assert
+	int 0
+	byte base64 VXNlcl9TdGFrZQ==
+	app_local_get
+	store 12
+	int 0
+	byte base64 VXNlcl9TdGFrZQ==
+	int 0
+	byte base64 VXNlcl9TdGFrZQ==
+	app_local_get
+	txna ApplicationArgs 1
+	b-
+	store 3
+	load 3
+	app_local_put
+	byte base64 R2xvYmFsX1N0YWtl
+	byte base64 R2xvYmFsX1N0YWtl
+	app_global_get
+	txna ApplicationArgs 1
+	b-
+	app_global_put
+	callsub label30
+	itxn_begin
+	int 0
+	itxn_field Fee
+	int 4
+	itxn_field TypeEnum
+	txna ApplicationArgs 1
+	btoi
+	itxn_field AssetAmount
+	bytec 8 
+	app_global_get
+	itxn_field XferAsset
+	txn Sender
+	itxn_field AssetReceiver
+	itxn_submit
+	int 1
+	return
+label21:
+	callsub label27
+	global GroupSize
+	byte base64 Tm9fUmV3YXJkX1Rva2Vu
+	app_global_get
+	int 1
+	+
+	==
+	assert
+	int 1
+	callsub label28
+	gtxn 0 Fee
+	int 2000
+	>=
+	assert
+	int 0
+	byte base64 VXNlcl9TdGFrZQ==
+	app_local_get
+	store 12
+	load 12
+	store 3
+	callsub label30
+	int 1
+	store 0
+label31:
+	load 0
+	callsub label7
+	store 1
+	itxn_begin
+	int 0
+	itxn_field Fee
+	int 4
+	itxn_field TypeEnum
+	int 0
+	byte base64 VXNlcl9DbGFpbWFibGVf
+	load 1
+	concat
+	app_local_get
+	btoi
+	itxn_field AssetAmount
+	bytec 12 
+	load 1
+	concat
+	app_global_get
+	itxn_field XferAsset
+	txn Sender
+	itxn_field AssetReceiver
+	itxn_submit
+	int 0
+	byte base64 VXNlcl9DbGFpbWFibGVf
+	load 1
+	concat
+	int 0
+	itob
+	app_local_put
+	load 0
+	int 1
+	+
+	store 0
+	load 0
+	byte base64 Tm9fUmV3YXJkX1Rva2Vu
+	app_global_get
+	<=
+	bnz label31
+	int 1
+	return
+label30:
+	int 1
+	store 0
+label34:
+	load 0
+	callsub label7
+	store 1
+	int 0
+	byte base64 VXNlcl9DbGFpbWFibGVf
+	load 1
+	concat
+	int 0
+	byte base64 VXNlcl9DbGFpbWFibGVf
+	load 1
+	concat
+	app_local_get
+	load 12
+	bytec 4 
+	load 1
+	concat
+	app_global_get
+	b*
+	bytec 5 
+	app_global_get
+	b/
+	int 0
+	bytec 13 
+	load 1
+	concat
+	app_local_get
+	dup2
+	b>=
+	bz label32
+	b-
+	b+
+	app_local_put
+	b label33
+label32:
+	pop
+	b+
+	app_local_put
+label33:
+	int 0
+	bytec 13 
+	load 1
+	concat
+	load 3
+	bytec 4 
+	load 1
+	concat
+	app_global_get
+	b*
+	bytec 5 
+	app_global_get
+	b/
+	app_local_put
+	load 0
+	int 1
+	+
+	store 0
+	load 0
+	byte base64 Tm9fUmV3YXJkX1Rva2Vu
+	app_global_get
+	<=
+	bnz label34
+	retsub
+label4:
+	callsub label11
+	callsub label27
+	global GroupSize
+	byte base64 Tm9fUmV3YXJkX1Rva2Vu
+	app_global_get
+	int 1
+	+
+	==
+	assert
+	int 1
+	callsub label28
+	gtxn 0 Fee
+	int 2000
+	>=
+	assert
+	callsub label19
+	int 0
+	byte base64 VXNlcl9TdGFrZQ==
+	app_local_get
+	store 12
+	int 0
+	byte base64 VXNlcl9TdGFrZQ==
+	int 0
+	byte base64 VXNlcl9TdGFrZQ==
+	app_local_get
+	store 3
+	int 0
+	itob
+	app_local_put
+	byte base64 R2xvYmFsX1N0YWtl
+	byte base64 R2xvYmFsX1N0YWtl
+	app_global_get
+	load 3
+	b-
+	app_global_put
+	itxn_begin
+	int 0
+	itxn_field Fee
+	int 4
+	itxn_field TypeEnum
+	load 3
+	btoi
+	itxn_field AssetAmount
+	bytec 8 
+	app_global_get
+	itxn_field XferAsset
+	txn Sender
+	itxn_field AssetReceiver
+	itxn_submit
+	callsub label30
+	int 1
+	store 0
+label35:
+	load 0
+	callsub label7
+	store 1
+	itxn_begin
+	int 0
+	itxn_field Fee
+	int 4
+	itxn_field TypeEnum
+	int 0
+	byte base64 VXNlcl9DbGFpbWFibGVf
+	load 1
+	concat
+	app_local_get
+	btoi
+	itxn_field AssetAmount
+	bytec 12 
+	load 1
+	concat
+	app_global_get
+	itxn_field XferAsset
+	txn Sender
+	itxn_field AssetReceiver
+	itxn_submit
+	int 0
+	byte base64 VXNlcl9DbGFpbWFibGVf
+	load 1
+	concat
+	int 0
+	itob
+	app_local_put
+	load 0
+	int 1
+	+
+	store 0
+	load 0
+	byte base64 Tm9fUmV3YXJkX1Rva2Vu
+	app_global_get
+	<=
+	bnz label35
+	int 1
+	return
+label14:
+	txn GroupIndex
+	int 0
+	!=
+	assert
+	int 0
+	txn OnCompletion
+	==
+	assert
+	int 1
+	return
+label7:
+	load 0
+	swap
+	load 1
+	swap
+	int 0
+	store 0
+label36:
+	load 0
+	int 1
+	+
+	store 0
+	dup
+	intc 4 
+	%
+	pushint 48
+	+
+	swap
+	intc 4 
+	/
+	dup
+	bnz label36
+	pop
+	load 0
+	bzero
+	int 0
+	store 1
+label37:
+	swap
+	load 1
+	swap
+	setbyte
+	load 1
+	int 1
+	+
+	dup
+	store 1
+	load 0
+	<
+	bnz label37
+	swap
+	store 1
+	swap
+	store 0
+	retsub
+label12:
+	callsub label9
+	global GroupSize
+	int 1
+	==
+	assert
+	gtxn 0 Fee
+	int 2000
+	>=
+	assert
+	itxn_begin
+	int 0
+	itxn_field Fee
+	int 4
+	itxn_field TypeEnum
+	int 0
+	itxn_field AssetAmount
+	txna ApplicationArgs 1
+	btoi
+	itxn_field XferAsset
+	global CurrentApplicationAddress
+	itxn_field AssetReceiver
+	itxn_submit
+	int 1
+	return
+label13:
+	callsub label9
+	global GroupSize
+	byte base64 Tm9fUmV3YXJkX1Rva2Vu
+	app_global_get
+	int 1
+	+
+	==
+	assert
+	int 1
+	store 0
+label38:
+	load 0
+	gtxns AssetReceiver
+	global CurrentApplicationAddress
+	==
+	assert
+	load 0
+	gtxns Sender
+	global CurrentApplicationAddress
+	!=
+	assert
+	load 0
+	callsub label7
+	store 1
+	bytec 10 
+	load 1
+	concat
+	bytec 10 
+	load 1
+	concat
+	app_global_get
+	load 0
+	gtxns AssetAmount
+	itob
+	b+
+	app_global_put
+	load 0
+	int 1
+	+
+	store 0
+	load 0
+	byte base64 Tm9fUmV3YXJkX1Rva2Vu
+	app_global_get
+	<=
+	bnz label38
+	int 1
+	return
+label29:
+	gtxns XferAsset
+	bytec 8 
+	app_global_get
+	==
+	assert
+	retsub
+label17:
+	global GroupSize
+	int 1
+	==
+	assert
+	callsub label9
+	itxn_begin
+	int 0
+	itxn_field Fee
+	int 4
+	itxn_field TypeEnum
+	txna ApplicationArgs 1
+	btoi
+	itxn_field AssetAmount
+	txna ApplicationArgs 2
+	btoi
+	itxn_field XferAsset
+	txn Sender
+	itxn_field AssetReceiver
+	itxn_submit
+	int 1
+	return
+label18:
+	global GroupSize
+	int 1
+	==
+	assert
+	callsub label9
+	gtxn 0 Fee
+	int 2000
+	>=
+	assert
+	itxn_begin
+	int 0
+	itxn_field Fee
+	int 1
+	itxn_field TypeEnum
+	txna ApplicationArgs 1
+	btoi
+	itxn_field Amount
+	txn Sender
+	itxn_field Receiver
+	itxn_submit
+	int 1
+	return
+label15:
+	callsub label9
+	global GroupSize
+	int 1
+	==
+	assert
+	bytec 11 
+	txna ApplicationArgs 1
+	app_global_put
+	int 1
+	return
+label16:
+	callsub label9
+	bytec 5 
+	intc 6 
+	itob
+	intc 6 
+	itob
+	b*
+	intc 6 
+	itob
+	b*
+	app_global_put
+	int 1
+	return
+label9:
+	bytec 11 
+	app_global_get
+	txn Sender
+	==
+	assert
+	retsub
+label11:
+	int 0
+	store 0
+label39:
+	load 0
+	gtxns RekeyTo
+	global ZeroAddress
+	==
+	assert
+	load 0
+	gtxns CloseRemainderTo
+	global ZeroAddress
+	==
+	assert
+	load 0
+	gtxns AssetCloseTo
+	global ZeroAddress
+	==
+	assert
+	load 0
+	int 1
+	+
+	store 0
+	load 0
+	global GroupSize
+	<
+	bnz label39
+	retsub
+label28:
+	store 0
+label40:
+	load 0
+	gtxnsa ApplicationArgs 0
+	bytec 15 
+	==
+	assert
+	load 0
+	gtxns ApplicationID
+	txn ApplicationID
+	==
+	assert
+	load 0
+	int 1
+	+
+	store 0
+	load 0
+	global GroupSize
+	<
+	bnz label40
+	retsub
+	int 0
+	return
